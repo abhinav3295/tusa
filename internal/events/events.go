@@ -5,21 +5,8 @@ import (
 )
 
 type TusaEvent struct {
-	EventDate   time.Time
-	Venue       string
-	Category    TusaCategory
-	Description string
+	EventDate   time.Time    `json:"date"`
+	Venue       string       `json:"venue"`
+	Category    TusaCategory `json:"category"`
+	Description string       `json:"description"`
 }
-
-type TusaCategory int64
-
-const (
-	BoardGame TusaCategory = iota
-	Karaoke
-	Clubbing
-	BarEvening
-	BBQ
-	Sports
-	Picnic
-	Other
-)

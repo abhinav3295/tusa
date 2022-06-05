@@ -9,8 +9,10 @@ This is the repository to hold the source code for exclusive tusa events for the
 3. Should be able to RSVP on events (update it with guests)
 
 ### APIs
+```
 GET /events
 GET /events/:id
 POST /events/:id/rsvp
 DELETE /events/:id
 POST /events
+```
