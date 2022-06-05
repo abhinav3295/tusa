@@ -17,5 +17,6 @@ func SetupServer() WebServer {
 	eventHandler := events.NewEventHandler(&tusaStorage)
 	router.GET("/events", eventHandler.List)
 	router.POST("/events", eventHandler.Add)
+	router.GET("/events/:id", eventHandler.Get)
 	return router
 }

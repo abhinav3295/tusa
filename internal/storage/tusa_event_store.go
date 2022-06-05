@@ -10,7 +10,7 @@ import (
 type TusaEventStore interface {
 	Add(event model.TusaEvent) error
 	Delete(event model.TusaEvent) error
-	Find(id uuid.UUID) *model.TusaEvent
+	Find(id uuid.UUID) (model.TusaEvent, bool)
 	FindAllLatest(since time.Time) []model.TusaEvent
 }
 
@@ -32,12 +32,9 @@ func (s *inMemoryTusaEventStore) Delete(event model.TusaEvent) error {
 	delete(s.store, event.Id)
 	return nil
 }
-func (s *inMemoryTusaEventStore) Find(id uuid.UUID) *model.TusaEvent {
+func (s *inMemoryTusaEventStore) Find(id uuid.UUID) (model.TusaEvent, bool) {
 	event, found := s.store[id]
-	if found {
-		return &event
-	}
-	return nil
+	return event, found
 }
 func (s *inMemoryTusaEventStore) FindAllLatest(since time.Time) []model.TusaEvent {
 	values := make([]model.TusaEvent, 0, len(s.store))
