@@ -18,8 +18,8 @@ type inMemoryTusaEventStore struct {
 	store map[uuid.UUID]model.TusaEvent
 }
 
-func NewTusaEventStore() inMemoryTusaEventStore {
-	return inMemoryTusaEventStore{
+func NewTusaEventStore() TusaEventStore {
+	return &inMemoryTusaEventStore{
 		store: make(map[uuid.UUID]model.TusaEvent),
 	}
 }
