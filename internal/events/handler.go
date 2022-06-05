@@ -2,8 +2,12 @@ package events
 
 import (
 	"net/http"
+	"time"
+	"tusa/internal/model"
+	"tusa/internal/storage"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type TusaEventHandler interface {
@@ -12,25 +16,26 @@ type TusaEventHandler interface {
 }
 
 type tusaEventHandler struct {
-	events []TusaEvent
+	storage storage.TusaEventStore
 }
 
-func NewEventHandler() TusaEventHandler {
+func NewEventHandler(storage storage.TusaEventStore) TusaEventHandler {
 	return &tusaEventHandler{
-		events: make([]TusaEvent, 0),
+		storage: storage,
 	}
 }
 
 func (h tusaEventHandler) List(c *gin.Context) {
 
-	c.JSON(http.StatusOK, gin.H{"events": h.events})
+	c.JSON(http.StatusOK, gin.H{"events": h.storage.FindAllLatest(time.Now())})
 }
 func (h *tusaEventHandler) Add(c *gin.Context) {
-	var event TusaEvent
+	var event model.TusaEvent
 	if err := c.ShouldBindJSON(&event); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"Failed to Parse": err.Error()})
 		return
 	}
-	h.events = append(h.events, event)
+	event.Id = uuid.New()
+	h.storage.Add(event)
 	c.JSON(http.StatusOK, gin.H{"event": event})
 }

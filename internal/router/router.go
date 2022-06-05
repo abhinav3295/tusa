@@ -2,6 +2,7 @@ package router
 
 import (
 	"tusa/internal/events"
+	"tusa/internal/storage"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +13,8 @@ type WebServer interface {
 
 func SetupServer() WebServer {
 	router := gin.Default()
-	eventHandler := events.NewEventHandler()
+	tusaStorage := storage.NewTusaEventStore()
+	eventHandler := events.NewEventHandler(&tusaStorage)
 	router.GET("/events", eventHandler.List)
 	router.POST("/events", eventHandler.Add)
 	return router
