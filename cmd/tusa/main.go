@@ -1,9 +1,16 @@
 package main
 
-import "tusa/internal/router"
+import (
+	"os"
+	"tusa/internal/router"
+)
 
 func main() {
 
 	server := router.SetupServer()
-	server.Run(":32958")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":32958"
+	}
+	server.Run(port)
 }
